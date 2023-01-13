@@ -133,12 +133,3 @@ if __name__=='__main__':
             all_scores[most_common_index].to_csv(path+'most_common_scores_wrel=%.2f.csv'%(most_common_index))
     
     
-    
-    # for w in all_weights:
-    #     # ./output/zeroshot-entsum/search_relattn-c_rel_weight/0.01/entsum_fewshot_final_relattn-c_fixed_perlayer_0.01_gaussian_10_1.000000_all_withent_seed=0/test_entsum_fewshot_final__relattn-c_1024_172_beam=4_lenPen=2.00-0.csv
-    #     file_name=path+str(w)+'/entsum_fewshot_final_relattn-c_fixed_perlayer_%.2f_gaussian_10_1.000000_all_withent_seed=0/'%(w)+'test_entsum_fewshot_final__relattn-c_1024_172_beam=4_lenPen=2.00-0.csv'
-    #     all_scores=pd.read_csv(file_name)
-    #     all_rouge_1.append(all_scores['rouge-1-f'].tolist()[:-1])
-    # all_rouge_1=np.array(all_rouge_1)
-    # print('max rouge-1 scores with diff weights: ', all_rouge_1.max(0).mean())
-    # print('all avg rouge_scores', all_rouge_1.mean(1))
