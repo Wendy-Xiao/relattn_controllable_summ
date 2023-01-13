@@ -13,7 +13,6 @@ def online_select_single(rouge_scorer,summaries,bertscore=None):
     for i,s in enumerate(summaries):
         if s not in identical_summaries:
             all_words = s.split()
-            # if len(set(all_words))/len(all_words) > 0.7:
             score = rouge_scorer.compute(
                     predictions=[s],
                     references=[summaries[0]],
@@ -49,7 +48,6 @@ def online_select_single(rouge_scorer,summaries,bertscore=None):
         output = identical_summaries_idx[identical_i]
     else:
         output=0
-    # pdb.set_trace()
 
     return output,summaries[output]
 
@@ -66,23 +64,16 @@ if __name__=='__main__':
         for dataset_name in ['entsum_fewshot_final','newts-words']:
             if dataset_name=='entsum_fewshot_final':
                 max_length=172
-                path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-entsum/test_%s_rel_weight_mbrs/"%(model)
+                path = "./output/zeroshot-entsum/test_%s_rel_weight_os/"%(model)
             else:
                 max_length=142
-                path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-newts/test_%s_rel_weight_mbrs/"%(model)
-                if model=='relattn-b':
-                    path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-newts/test_relattn_rel_weight_mbrs/"
-            # path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-entsum/search_relattn_rel_weight_mbrs/"
-            # path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-newts/search_relattn_rel_weight_mbrs/"
-            # # path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-newts/test_relattn_rel_weight_mbrs/"
-            # # path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-newts/test_%s_rel_weight_mbrs/"%(model)
-            # path = "/home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-entsum/test_%s_rel_weight_mbrs/"%(model)
+                path = "./output/zeroshot-newts/test_%s_rel_weight_os/"%(model)
+
             summary_path=path+'final_result'
             if not os.path.exists(summary_path):
                 os.mkdir(summary_path)
             all_weights = list(np.array(range(1,31))/100)
-            # get all file names
-            # file_name=path+str(all_weights[0])+'/entsum_relattn-b_fixed_perlayer_%.2f_gaussian_10_1.000000_all_seed=0/'%(all_weights[0])+'test_entsum__relattn-b_1024_172_beam=4_lenPen=2.00-0.csv'
+            
             if model=='relattn-c':
                 file_name=path+str(all_weights[0])+'/%s_%s_fixed_perlayer_%.2f_gaussian_10_1.000000_all_withent_seed=0/'%(dataset_name,model,all_weights[0])+'test_%s__%s_1024_%d_beam=4_lenPen=2.00-0.csv'%(dataset_name,model,max_length)
             else:
@@ -112,8 +103,6 @@ if __name__=='__main__':
             all_scores=[]
             final_scores=[]
             for iw,w in enumerate(all_weights):
-                # file_name=path+'%.2f'%(w)+'/entsum_relattn-b_fixed_perlayer_%.2f_gaussian_10_1.000000_all_seed=0/'%(w)\
-                #     +'test_entsum__relattn-b_1024_172_beam=4_lenPen=2.00-0.csv'
                 if model=='relattn-c': 
                     file_name=path+'%.2f'%(w)+'/%s_%s_fixed_perlayer_%.2f_gaussian_10_1.000000_all_withent_seed=0/'%(dataset_name,model,w)\
                         +'test_%s__%s_1024_%d_beam=4_lenPen=2.00-0.csv'%(dataset_name,model,max_length)
@@ -121,9 +110,7 @@ if __name__=='__main__':
                     file_name=path+'%.2f'%(w)+'/%s_%s_fixed_perlayer_%.2f_gaussian_10_1.000000_all_seed=0/'%(dataset_name,model,w)\
                         +'test_%s__%s_1024_%d_beam=4_lenPen=2.00-0.csv'%(dataset_name,model,max_length)
                 scores=pd.read_csv(file_name)
-                # rouge_1=all_scores['rouge-2-f'].tolist()[:-1]
                 all_scores.append(scores)
-                # final_rouge_1[all_indices==iw]=rouge_1[all_indices==iw]
             for ii,i in enumerate(all_indices):
                 final_scores.append(all_scores[i].loc[ii:ii])
             all_rouge_1=np.array([scores['rouge-1-f'].tolist()[:-1] for scores in all_scores])
@@ -148,7 +135,7 @@ if __name__=='__main__':
     
     
     # for w in all_weights:
-    #     # /home/azureuser/wenxiao/container/amulet/final_experiments/zeroshot-entsum/search_relattn-c_rel_weight/0.01/entsum_fewshot_final_relattn-c_fixed_perlayer_0.01_gaussian_10_1.000000_all_withent_seed=0/test_entsum_fewshot_final__relattn-c_1024_172_beam=4_lenPen=2.00-0.csv
+    #     # ./output/zeroshot-entsum/search_relattn-c_rel_weight/0.01/entsum_fewshot_final_relattn-c_fixed_perlayer_0.01_gaussian_10_1.000000_all_withent_seed=0/test_entsum_fewshot_final__relattn-c_1024_172_beam=4_lenPen=2.00-0.csv
     #     file_name=path+str(w)+'/entsum_fewshot_final_relattn-c_fixed_perlayer_%.2f_gaussian_10_1.000000_all_withent_seed=0/'%(w)+'test_entsum_fewshot_final__relattn-c_1024_172_beam=4_lenPen=2.00-0.csv'
     #     all_scores=pd.read_csv(file_name)
     #     all_rouge_1.append(all_scores['rouge-1-f'].tolist()[:-1])
