@@ -5,7 +5,7 @@ The official code for 'Attend to the Right Context: A Plug-and-Play Module for C
 The configure file of the virtual environment for our experiments is in `pplm_env_latest.yaml`.
 You can create an identical environment using 
 ```
-conda create -n relattn_env -f pplm_env_latest.yaml
+conda env create -n relattn_env -f pplm_env_latest.yaml
 ```
 
 ## Datasets
